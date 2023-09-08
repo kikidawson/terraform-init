@@ -1,8 +1,8 @@
 resource "aws_s3_bucket" "state" {
-  bucket = "${var.project_name}-state-bucket"
+  bucket = "${var.project_name}-assorted"
 
   tags = {
-    Name = "${var.project_name}-state-bucket"
+    Name = "${var.project_name}-assorted"
   }
 }
 
@@ -33,18 +33,4 @@ resource "aws_dynamodb_table" "lock" {
   tags = {
     Name = "${var.project_name}-lock"
   }
-}
-
-resource "aws_iam_role" "deployment" {
-  name               = "${var.project_name}-deployment"
-  assume_role_policy = data.aws_iam_policy_document.trust_policy.json
-
-  tags = {
-    Name = "${var.project_name}-deployment"
-  }
-}
-
-resource "aws_iam_role_policy_attachment" "deployment" {
-  role        = aws_iam_role.deployment.name
-  policy_arn  = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
