@@ -34,3 +34,15 @@ resource "aws_dynamodb_table" "lock" {
     Name = "${var.project_name}-lock"
   }
 }
+
+resource "aws_iam_openid_connect_provider" "github" {
+  client_id_list  = ["sts.amazonaws.com"]
+  url             = "https://token.actions.githubusercontent.com"
+  thumbprint_list = ["0000000000000000000000000000000000000000"]
+}
+
+resource "aws_iam_role" "deployment" {
+  name                = "cicd-admin"
+  assume_role_policy  = data.aws_iam_policy_document.iam_trust_policy.json
+  managed_policy_arns = ["arn:aws:iam::aws:policy/AdministratorAccess"]
+}
